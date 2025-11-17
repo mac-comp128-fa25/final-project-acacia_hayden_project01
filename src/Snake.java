@@ -17,4 +17,21 @@ public class Snake {
         return body;
     }
 
+    public void move(){
+
+    }
+
+    public void grow() {
+
+    }
+
+    public boolean checkCollision() {
+        return false;
+
+    }
+
+    public void setDirection() {
+        
+    }
+
 }
