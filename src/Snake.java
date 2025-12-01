@@ -55,5 +55,5 @@ public class Snake {
         dy = newDY;
         
     }
-
+    
 }
