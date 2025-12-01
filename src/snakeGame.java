@@ -93,6 +93,12 @@ public class snakeGame {
             return;
         }
 
+        //self collision added
+        if (snake.checkCollision()) {
+            gameOver = true;
+            return;
+        }
+
         // still need to add self collision later
         if (head.equals(food)) {
             snake.grow();
