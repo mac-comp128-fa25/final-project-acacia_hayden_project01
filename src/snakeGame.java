@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 
-public class snakeGame {
+public class SnakeGame {
 
     private static final int CELL_SIZE = 25;
     private static final int ROWS = 20;
@@ -29,7 +29,7 @@ public class snakeGame {
 
 
 
-    public snakeGame() {
+    public SnakeGame() {
         canvas = new CanvasWindow("Snake Survival", COLS * CELL_SIZE, ROWS * CELL_SIZE);
 
         canvas.setBackground(Color.BLACK);
@@ -154,9 +154,8 @@ public class snakeGame {
 
 
     public static void main(String[] args) {
-
-        new snakeGame();
-
+        
+        new SnakeGame();
         
     }
 
