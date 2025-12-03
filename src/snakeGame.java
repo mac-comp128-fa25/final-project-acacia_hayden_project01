@@ -128,6 +128,7 @@ public class SnakeGame {
     private void draw() {
 
         canvas.removeAll();
+        grid.draw(canvas, CELL_SIZE);
 
         for (Position part : snake.getBody()) {
             Rectangle r = new Rectangle(
