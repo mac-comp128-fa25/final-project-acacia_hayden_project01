@@ -41,31 +41,31 @@ public class SnakeGame {
 
         draw();
 
-        canvas.onKeyDown(e -> handleKey(e));
+        canvas.onKeyDown(event -> { 
+             Key key = event.getKey();
+
+            if (key == Key.UP_ARROW) {
+                snake.setVelocity(0, -1);
+
+
+            } else if (key == Key.DOWN_ARROW) {
+
+
+                snake.setVelocity(0, 1);
+
+            } else if (key == Key.LEFT_ARROW) {
+
+                snake.setVelocity(-1, 0);
+
+            } else if (key == Key.RIGHT_ARROW) {
+                snake.setVelocity(1, 0);
+        }
+        });
         canvas.animate(dt -> update(dt));
+        
         }
 
 
-    private void handleKey(KeyboardEvent event) {
-        Key key = event.getKey();
-
-        if (key == Key.UP_ARROW) {
-            snake.setVelocity(0, -1);
-
-
-        } else if (key == Key.DOWN_ARROW) {
-
-
-            snake.setVelocity(0, 1);
-
-        } else if (key == Key.LEFT_ARROW) {
-
-            snake.setVelocity(-1, 0);
-
-        } else if (key == Key.RIGHT_ARROW) {
-            snake.setVelocity(1, 0);
-        }
-    }
 
 
     private void update(double dt) {
