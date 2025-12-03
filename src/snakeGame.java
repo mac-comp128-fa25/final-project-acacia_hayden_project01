@@ -27,6 +27,7 @@ public class SnakeGame {
     private double timeSinceMove = 0;
     private double moveDelay = 0.2;
 
+    private Score score;
 
 
     public SnakeGame() {
@@ -36,6 +37,7 @@ public class SnakeGame {
 
         grid = new Grid(ROWS, COLS);
         snake = new Snake(ROWS / 2, COLS / 2);
+        score = new Score(canvas, 10, 20);
 
         spawnFood();
 
@@ -88,8 +90,9 @@ public class SnakeGame {
         snake.move();
         Position head = snake.getHead();
 
-        if (!grid.inBounds(head)) {
+        if (!grid.inBounds(head) || snake.checkCollision()) {
             gameOver = true;
+            score.showGameOver();
             return;
         }
 
@@ -103,6 +106,7 @@ public class SnakeGame {
         if (head.equals(food)) {
             snake.grow();
             spawnFood();
+            score.increment();
         }
 
         draw();
