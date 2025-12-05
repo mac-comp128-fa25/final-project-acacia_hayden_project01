@@ -6,7 +6,10 @@ import edu.macalester.graphics.events.Key;
 
 import edu.macalester.graphics.events.KeyboardEvent;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class SnakeGame {
@@ -20,7 +23,7 @@ public class SnakeGame {
 
     private Grid grid;
 
-    private Position food;
+    // private List<Position> food = new ArrayList<>();
 
     private boolean gameOver = false;
 
@@ -28,6 +31,7 @@ public class SnakeGame {
     private double moveDelay = 0.2;
 
     private Score score;
+    private ArrayList<Food> foods = new ArrayList<>();
 
 
     public SnakeGame() {
@@ -39,7 +43,7 @@ public class SnakeGame {
         snake = new Snake(ROWS / 2, COLS / 2);
         score = new Score(canvas, 10, 20);
 
-        spawnFood();
+        spawnFood(5);
 
         draw();
 
@@ -86,9 +90,21 @@ public class SnakeGame {
 
 
     private void step() {
-
         snake.move();
         Position head = snake.getHead();
+
+        // check food collison
+        Iterator<Food> it = foods.iterator();
+        while (it.hasNext()) {
+            Food f = it.next();
+            if (head.equals(f.position)) {
+                snake.grow();
+                snake.setColor(f.color);// Snake turns the color of the food!
+                score.increment();
+                it.remove();
+                spawnFood(1);
+            }
+        }
 
         if (!grid.inBounds(head) || snake.checkCollision()) {
             gameOver = true;
@@ -96,32 +112,45 @@ public class SnakeGame {
             return;
         }
 
-        //self collision added
-        if (snake.checkCollision()) {
-            gameOver = true;
-            return;
-        }
-
-        // still need to add self collision later
-        if (head.equals(food)) {
-            snake.grow();
-            spawnFood();
-            score.increment();
-        }
-
         draw();
+        
     }
 
+    private void spawnFood(int count) {
 
-    private void spawnFood() {
-        Position p;
+        Color[] colors = {Color.RED, Color.BLUE, Color.YELLOW, Color.ORANGE, Color.PINK};
         LinkedList<Position> body = snake.getBody();
 
-        do {
-            p = grid.randomPosition();
-        } while (body.contains(p));
 
-        food = p;
+        for (int i = 0; i < count; i++) {
+            Position p;
+            boolean valid;
+
+            do {
+                p = grid.randomPosition();
+                valid = true;
+
+                for (Position s : body) {
+                    if (s.equals(p)) {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                for (Food f : foods) {
+                    if (f.position.equals(p)) {
+                        valid = false;
+                        break;
+                    }
+                }
+
+            } while (!valid);
+
+            Color c = colors[(foods.size() + i) % colors.length];
+
+            foods.add(new Food(p,c));
+
+        }
     }
 
 
@@ -130,29 +159,22 @@ public class SnakeGame {
         canvas.removeAll();
         grid.draw(canvas, CELL_SIZE);
 
-        for (Position part : snake.getBody()) {
-            Rectangle r = new Rectangle(
-                    part.col * CELL_SIZE,
-                    part.row * CELL_SIZE,
-                    CELL_SIZE,
-                    CELL_SIZE
-            );
+        for (Food f : foods) {
+            Rectangle foodRect = new Rectangle(f.position.col * CELL_SIZE, f.position.row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            foodRect.setFilled(true);
+            foodRect.setFillColor(f.color);
+            canvas.add(foodRect);
+        }
 
+        for (Position part : snake.getBody()) {
+            Rectangle r = new Rectangle(part.col * CELL_SIZE,part.row * CELL_SIZE,CELL_SIZE,CELL_SIZE);
             r.setFilled(true);
-            r.setFillColor(Color.GREEN);
+            r.setFillColor(snake.getColor());
 
             canvas.add(r);
 
         }
 
-        Rectangle foodRect = new Rectangle(
-                food.col * CELL_SIZE, food.row * CELL_SIZE, CELL_SIZE, CELL_SIZE
-              
-        );
-        foodRect.setFilled(true);
-        foodRect.setFillColor(Color.RED);
-
-        canvas.add(foodRect);
     }
 
 

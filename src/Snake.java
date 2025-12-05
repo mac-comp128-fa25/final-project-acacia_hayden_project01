@@ -8,6 +8,7 @@ public class Snake {
     private int dx = 1;
     private int dy = 0;
     private boolean growing = false;
+    private Color color = Color.GREEN;
 
 
     public Snake(int row, int col) {
@@ -71,6 +72,14 @@ public class Snake {
             segment.setStrokeColor(Color.BLACK);
             group.add(segment);
         }
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color newColor) {
+        this.color = newColor;
     }
 
 }
