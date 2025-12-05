@@ -92,6 +92,7 @@ public class SnakeGame {
     private void step() {
         snake.move();
         Position head = snake.getHead();
+        boolean foodEaten = false;
 
         // check food collison
         Iterator<Food> it = foods.iterator();
@@ -102,12 +103,12 @@ public class SnakeGame {
                 snake.setColor(f.color);// Snake turns the color of the food!
                 score.increment();
                 it.remove();
+                foodEaten = true;
             }
 
         }
-
-        if (foods.isEmpty()) {
-            spawnFood(8);
+        if (foodEaten) {
+            spawnFood(1);
         }
 
 
