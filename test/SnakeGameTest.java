@@ -1,9 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertFalse;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
+
 
 import org.junit.jupiter.api.Test;
 
@@ -40,23 +40,36 @@ public class SnakeGameTest {
     @Test
     public void testCollision() {
         Snake snake = new Snake(5,5);
-        snake.grow();
-        snake.move();
 
         snake.grow();
         snake.move();
-
         snake.grow();
         snake.move();
+        snake.grow();
+        snake.move();
+
 
         snake.setVelocity(0, 1);
         snake.move();
+
         snake.setVelocity(-1, 0);
         snake.move();
+        snake.grow();
+
         snake.setVelocity(0, -1);
         snake.move();
 
         assertTrue(snake.checkCollision());
+    }
+
+    @Test
+    public void testGridInBounds() {
+        Grid grid = new Grid(20,20 );
+        assertTrue(grid.inBounds(new Position(10, 10)));
+        assertFalse(grid.inBounds(new Position(-1, 10)));
+        assertFalse(grid.inBounds(new Position(20,20)));
+
+
     }
 
 
