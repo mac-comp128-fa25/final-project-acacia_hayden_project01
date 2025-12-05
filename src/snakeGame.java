@@ -102,9 +102,14 @@ public class SnakeGame {
                 snake.setColor(f.color);// Snake turns the color of the food!
                 score.increment();
                 it.remove();
-                spawnFood(1);
             }
+
         }
+
+        if (foods.isEmpty()) {
+            spawnFood(8);
+        }
+
 
         if (!grid.inBounds(head) || snake.checkCollision()) {
             gameOver = true;

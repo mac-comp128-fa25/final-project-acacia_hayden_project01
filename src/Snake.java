@@ -82,4 +82,12 @@ public class Snake {
         this.color = newColor;
     }
 
+    public boolean ateFood(Position foodPos) {
+        if (getHead().equals(foodPos)) {
+            grow();
+            return true;
+        }
+        return false;
+    }
+
 }
