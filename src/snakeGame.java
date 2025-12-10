@@ -23,7 +23,6 @@ public class SnakeGame {
 
     private Grid grid;
 
-    // private List<Position> food = new ArrayList<>();
 
     private boolean gameOver = false;
 
@@ -108,7 +107,7 @@ public class SnakeGame {
 
         }
         if (foodEaten) {
-            spawnFood(1);
+            spawnFood(3);
         }
 
 
