@@ -107,7 +107,7 @@ public class SnakeGame {
 
         }
         if (foodEaten) {
-            spawnFood(3);
+            spawnFood(2);
         }
 
 
@@ -151,7 +151,7 @@ public class SnakeGame {
 
             } while (!valid);
 
-            Color c = colors[(foods.size() + i) % colors.length];
+            Color c = colors[(int)((Math.random()) * colors.length)];
 
             foods.add(new Food(p,c));
 
