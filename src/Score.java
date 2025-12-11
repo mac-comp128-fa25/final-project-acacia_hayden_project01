@@ -25,12 +25,17 @@ public class Score {
         return score;
     }
 
+    public void reset() {
+        score = 0;
+        scoreText.setText("Score: 0");
+    }
+
     public void updateText() {
         scoreText.setText("Score:" + score);
     }
 
     public void showGameOver() {
-        GraphicsText gameOverText = new GraphicsText("GAME OVER! Final Score:" + score, 
+        GraphicsText gameOverText = new GraphicsText("GAME OVER! Final Score: " + score, 
         canvas.getWidth()/2-120, canvas.getHeight()/2);
 
         gameOverText.setFillColor(Color.RED);

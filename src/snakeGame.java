@@ -5,6 +5,8 @@ import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.events.Key;
 
 import edu.macalester.graphics.events.KeyboardEvent;
+import edu.macalester.graphics.ui.Button;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +24,7 @@ public class SnakeGame {
     private Snake snake;
 
     private Grid grid;
+    private Button restartButton;
 
 
     private boolean gameOver = false;
@@ -114,6 +117,7 @@ public class SnakeGame {
         if (!grid.inBounds(head) || snake.checkCollision()) {
             gameOver = true;
             score.showGameOver();
+            setUpRestart();
             return;
         }
 
@@ -182,7 +186,30 @@ public class SnakeGame {
 
     }
 
+    public void setUpRestart() {
+        if (restartButton == null) {
+            restartButton = new Button("Restart");
+            restartButton.onClick(() -> restartGame());
+        }
+        canvas.add(restartButton);
+        restartButton.setCenter(COLS*CELL_SIZE/2, ROWS*CELL_SIZE/2 + 50);
+    }
 
+    public void restartGame() {
+        gameOver = false;
+        timeSinceMove = 0;
+        snake = new Snake(ROWS/2, COLS/2);
+        foods.clear();
+        spawnFood(3);
+        score.reset();
+
+        if (restartButton != null) {
+            canvas.remove(restartButton);
+        }
+
+        draw();
+
+    }
 
 
     public static void main(String[] args) {
