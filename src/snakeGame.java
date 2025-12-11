@@ -16,17 +16,16 @@ import java.util.List;
 
 public class SnakeGame {
 
-    private static final int CELL_SIZE = 25;
-    private static final int ROWS = 20;
-    private static final int COLS = 20;
+    private static final int CELL_SIZE = 40;
+    private static final int ROWS = 25;
+    private static final int COLS = 48;
 
     private CanvasWindow canvas;
     private Snake snake;
 
     private Grid grid;
     private Button restartButton;
-
-
+    
     private boolean gameOver = false;
 
     private double timeSinceMove = 0;
