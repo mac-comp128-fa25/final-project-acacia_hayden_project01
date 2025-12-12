@@ -5,6 +5,7 @@ import java.awt.Color;
 public class Snake {
 
     private LinkedList<Segment> body; 
+    LinkedList<Color> colorQueue;
     private int dx = 1;
     private int dy = 0;
     private boolean growing = false;
@@ -13,7 +14,9 @@ public class Snake {
 
     public Snake(int row, int col) {
         body = new LinkedList<>();
+        colorQueue = new LinkedList<>();
         body.add(new Segment(new Position(row,col), Color.GREEN));
+        colorQueue.add(Color.GREEN);
 
     }
 
@@ -31,10 +34,10 @@ public class Snake {
 
     public void move(){
 
-        LinkedList<Color> oldBodyColors = new LinkedList<>();
-        for (Segment seg : body) {
-            oldBodyColors.add(seg.color);
-        }
+        // LinkedList<Color> oldBodyColors = new LinkedList<>();
+        // for (Segment seg : body) {
+        //     oldBodyColors.add(seg.color);
+        // }
 
         Segment head = getHead();
         Position newHeadPos = new Position(head.pos.row + dy, head.pos.col + dx);
@@ -44,19 +47,21 @@ public class Snake {
             newHeadColor = nextSegmentColor;
         } else {
             newHeadColor = head.color;
-        }
+        }        
 
         Segment newHead = new Segment(newHeadPos, newHeadColor);
         body.addFirst(newHead);
-
-        for (int i = 1; i < body.size(); i++) {
-            body.get(i).color = oldBodyColors.get(i -1);
-        }
+        colorQueue.addFirst(newHeadColor);
 
         if(growing) {
             growing = false;
         } else {
             body.removeLast();
+            colorQueue.removeLast();
+        }
+
+        for (int i = 0; i < body.size(); i++) {
+            body.get(i).color = colorQueue.get(i);
         }
 
 

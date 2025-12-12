@@ -1,5 +1,5 @@
 import edu.macalester.graphics.CanvasWindow;
-
+import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Rectangle;
 
 import edu.macalester.graphics.events.Key;
@@ -33,6 +33,7 @@ public class SnakeGame {
 
     private Score score;
     private ArrayList<Food> foods = new ArrayList<>();
+    private GraphicsGroup snakeGroup;
 
 
     public SnakeGame() {
@@ -43,6 +44,8 @@ public class SnakeGame {
         grid = new Grid(ROWS, COLS);
         snake = new Snake(ROWS / 2, COLS / 2);
         score = new Score(canvas, 10, 20);
+        snakeGroup = new GraphicsGroup();
+        canvas.add(snakeGroup)
 
         spawnFood(5);
 
@@ -91,14 +94,14 @@ public class SnakeGame {
 
 
     private void step() {
-        Segment head = snake.getHead();
         boolean foodEaten = false;
 
         // check food collison
         Iterator<Food> it = foods.iterator();
         while (it.hasNext()) {
             Food f = it.next();
-            if (snake.ateFood(f.position, f.color)) {
+            if (snake.getHeadPos.equals(f.position)) {
+                snake.grow(f.color);
                 score.increment();
                 it.remove();
                 foodEaten = true;
@@ -111,7 +114,7 @@ public class SnakeGame {
             spawnFood(2);
         }
 
-        head = snake.getHead();
+        Segment head = snake.getHead();
         if (!grid.inBounds(head.pos) || snake.checkCollision()) {
             gameOver = true;
             score.showGameOver();
@@ -173,15 +176,7 @@ public class SnakeGame {
             canvas.add(foodRect);
         }
 
-        for (Segment seg : snake.getBody()) {
-            Rectangle r = new Rectangle(seg.pos.col * CELL_SIZE,seg.pos.row * CELL_SIZE,CELL_SIZE,CELL_SIZE);
-            r.setFilled(true);
-            r.setFillColor(seg.color);
-            r.setStrokeColor(Color.BLACK);
-
-            canvas.add(r);
-
-        }
+        snake.render(snakeGroup, CELL_SIZE);
 
     }
 
