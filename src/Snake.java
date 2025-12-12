@@ -8,7 +8,7 @@ public class Snake {
     private int dx = 1;
     private int dy = 0;
     private boolean growing = false;
-    private Color nextSegmentColor = Color.GREEN;
+    private Color nextSegmentColor;
 
 
     public Snake(int row, int col) {
@@ -30,20 +30,33 @@ public class Snake {
     }
 
     public void move(){
+
+        LinkedList<Color> oldBodyColors = new LinkedList<>();
+        for (Segment seg : body) {
+            oldBodyColors.add(seg.color);
+        }
+
         Segment head = getHead();
-        Position newHead = new Position(head.pos.row + dy, head.pos.col + dx);
+        Position newHeadPos = new Position(head.pos.row + dy, head.pos.col + dx);
 
-        body.addFirst(new Segment(newHead, head.color));
-
-        if(!growing){
-            body.removeLast();
+        Color newHeadColor;
+        if (growing) {
+            newHeadColor = nextSegmentColor;
         } else {
+            newHeadColor = head.color;
+        }
+
+        Segment newHead = new Segment(newHeadPos, newHeadColor);
+        body.addFirst(newHead);
+
+        for (int i = 1; i < body.size(); i++) {
+            body.get(i).color = oldBodyColors.get(i -1);
+        }
+
+        if(growing) {
             growing = false;
-
-            Segment tail = body.getLast();
-            Position tailPos = tail.pos;
-
-            body.addLast(new Segment(new Position(tailPos.row, tailPos.col), nextSegmentColor));
+        } else {
+            body.removeLast();
         }
 
 
