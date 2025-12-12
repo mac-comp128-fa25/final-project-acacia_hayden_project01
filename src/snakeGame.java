@@ -91,7 +91,6 @@ public class SnakeGame {
 
 
     private void step() {
-        snake.move();
         Segment head = snake.getHead();
         boolean foodEaten = false;
 
@@ -106,11 +105,13 @@ public class SnakeGame {
             }
 
         }
-        if (foodEaten) {
+        snake.move();
+
+        if (foodEaten){
             spawnFood(2);
         }
 
-
+        head = snake.getHead();
         if (!grid.inBounds(head.pos) || snake.checkCollision()) {
             gameOver = true;
             score.showGameOver();
