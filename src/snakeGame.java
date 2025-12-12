@@ -92,16 +92,14 @@ public class SnakeGame {
 
     private void step() {
         snake.move();
-        Position head = snake.getHead();
+        Segment head = snake.getHead();
         boolean foodEaten = false;
 
         // check food collison
         Iterator<Food> it = foods.iterator();
         while (it.hasNext()) {
             Food f = it.next();
-            if (head.equals(f.position)) {
-                snake.grow();
-                snake.setColor(f.color);// Snake turns the color of the food!
+            if (snake.ateFood(f.position, f.color)) {
                 score.increment();
                 it.remove();
                 foodEaten = true;
@@ -113,7 +111,7 @@ public class SnakeGame {
         }
 
 
-        if (!grid.inBounds(head) || snake.checkCollision()) {
+        if (!grid.inBounds(head.pos) || snake.checkCollision()) {
             gameOver = true;
             score.showGameOver();
             setUpRestart();
@@ -127,7 +125,7 @@ public class SnakeGame {
     private void spawnFood(int count) {
 
         Color[] colors = {Color.RED, Color.BLUE, Color.YELLOW, Color.ORANGE, Color.PINK};
-        LinkedList<Position> body = snake.getBody();
+        LinkedList<Segment> body = snake.getBody();
 
 
         for (int i = 0; i < count; i++) {
@@ -138,8 +136,8 @@ public class SnakeGame {
                 p = grid.randomPosition();
                 valid = true;
 
-                for (Position s : body) {
-                    if (s.equals(p)) {
+                for (Segment s : body) {
+                    if (s.pos.equals(p)) {
                         valid = false;
                         break;
                     }
@@ -174,10 +172,11 @@ public class SnakeGame {
             canvas.add(foodRect);
         }
 
-        for (Position part : snake.getBody()) {
-            Rectangle r = new Rectangle(part.col * CELL_SIZE,part.row * CELL_SIZE,CELL_SIZE,CELL_SIZE);
+        for (Segment seg : snake.getBody()) {
+            Rectangle r = new Rectangle(seg.pos.col * CELL_SIZE,seg.pos.row * CELL_SIZE,CELL_SIZE,CELL_SIZE);
             r.setFilled(true);
-            r.setFillColor(snake.getColor());
+            r.setFillColor(seg.color);
+            r.setStrokeColor(Color.BLACK);
 
             canvas.add(r);
 

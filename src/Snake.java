@@ -4,49 +4,60 @@ import java.awt.Color;
 
 public class Snake {
 
-    private LinkedList<Position> body; 
+    private LinkedList<Segment> body; 
     private int dx = 1;
     private int dy = 0;
     private boolean growing = false;
-    private Color color = Color.GREEN;
+    private Color nextSegmentColor = Color.GREEN;
 
 
     public Snake(int row, int col) {
         body = new LinkedList<>();
-        body.add(new Position(row, col));
+        body.add(new Segment(new Position(row,col), Color.GREEN));
 
     }
 
-    public Position getHead() {
+    public Segment getHead() {
         return body.getFirst();
     }
 
-    public LinkedList<Position> getBody() {
+    public Position getHeadPos() {
+        return body.getFirst().pos;
+    }
+
+    public LinkedList<Segment> getBody() {
         return body;
     }
 
     public void move(){
-        Position head = getHead();
-        Position newHead = new Position(head.row + dy, head.col + dx);
+        Segment head = getHead();
+        Position newHead = new Position(head.pos.row + dy, head.pos.col + dx);
 
-        body.addFirst(newHead);
+        body.addFirst(new Segment(newHead, head.color));
 
         if(!growing){
             body.removeLast();
         } else {
             growing = false;
+
+            Segment tail = body.getLast();
+            Position tailPos = tail.pos;
+
+            body.addLast(new Segment(new Position(tailPos.row, tailPos.col), nextSegmentColor));
         }
+
 
     }
 
-    public void grow() {
+    public void grow(Color foodColor) {
         growing = true;
+        nextSegmentColor = foodColor;
     }
 
     public boolean checkCollision() {
-        Position head = getHead();
+        Position head = getHeadPos();
         for (int i=1; i < body.size(); i++) {
-            if (head.equals(body.get(i))){
+            if (head.equals(body.get(i).pos)){
                 return true;
             }
         }
@@ -66,25 +77,17 @@ public class Snake {
 
     public void render(GraphicsGroup group) {
         group.removeAll();
-        for (Position pos: body) {
-            Rectangle segment = new Rectangle(pos.col * 20, pos.row * 20, 20, 20);
-            segment.setFillColor(Color.GREEN);
+        for (Segment seg: body) {
+            Rectangle segment = new Rectangle(seg.pos.col * 20, seg.pos.row * 20, 20, 20);
+            segment.setFillColor(seg.color);
             segment.setStrokeColor(Color.BLACK);
             group.add(segment);
         }
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color newColor) {
-        this.color = newColor;
-    }
-
-    public boolean ateFood(Position foodPos) {
-        if (getHead().equals(foodPos)) {
-            grow();
+    public boolean ateFood(Position foodPos, Color foodColor) {
+        if (getHeadPos().equals(foodPos)) {
+            grow(foodColor);
             return true;
         }
         return false;
