@@ -93,16 +93,6 @@ public class Snake {
         
     }
 
-    public void render(GraphicsGroup group) {
-        group.removeAll();
-        for (Segment seg: body) {
-            Rectangle segment = new Rectangle(seg.pos.col * 20, seg.pos.row * 20, 20, 20);
-            segment.setFillColor(seg.color);
-            segment.setStrokeColor(Color.BLACK);
-            group.add(segment);
-        }
-    }
-
     public boolean ateFood(Position foodPos, Color foodColor) {
         if (getHeadPos().equals(foodPos)) {
             grow(foodColor);

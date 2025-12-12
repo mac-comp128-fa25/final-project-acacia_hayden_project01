@@ -45,7 +45,7 @@ public class SnakeGame {
         snake = new Snake(ROWS / 2, COLS / 2);
         score = new Score(canvas, 10, 20);
         snakeGroup = new GraphicsGroup();
-        canvas.add(snakeGroup)
+        canvas.add(snakeGroup);
 
         spawnFood(5);
 
@@ -100,8 +100,8 @@ public class SnakeGame {
         Iterator<Food> it = foods.iterator();
         while (it.hasNext()) {
             Food f = it.next();
-            if (snake.getHeadPos.equals(f.position)) {
-                snake.grow(f.color);
+            if (snake.getHeadPos().equals(f.position)) {
+                snake.ateFood(f.position, f.color);
                 score.increment();
                 it.remove();
                 foodEaten = true;
@@ -176,7 +176,13 @@ public class SnakeGame {
             canvas.add(foodRect);
         }
 
-        snake.render(snakeGroup, CELL_SIZE);
+        for (Segment seg : snake.getBody()) {
+        Rectangle r = new Rectangle(seg.pos.col * CELL_SIZE, seg.pos.row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        r.setFilled(true);
+        r.setFillColor(seg.color);
+        r.setStrokeColor(Color.BLACK);
+        canvas.add(r);
+    }
 
     }
 
