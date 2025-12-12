@@ -17,8 +17,8 @@ import java.util.List;
 public class SnakeGame {
 
     private static final int CELL_SIZE = 40;
-    private static final int ROWS = 25;
-    private static final int COLS = 48;
+    private static final int ROWS = 15;
+    private static final int COLS = 30;
 
     private CanvasWindow canvas;
     private Snake snake;
