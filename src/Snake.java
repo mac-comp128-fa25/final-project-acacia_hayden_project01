@@ -14,7 +14,6 @@ public class Snake {
     public Snake(int row, int col) {
         body = new LinkedList<>();
         body.add(new Segment(new Position(row,col), Color.GREEN));
-
     }
 
     public Segment getHead() {
@@ -30,21 +29,24 @@ public class Snake {
     }
 
     public void move(){
+        Segment oldTail = body.getLast();
+        Position oldTailPos = new Position(oldTail.pos.row, oldTail.pos.col);
 
         Segment head = getHead();
         Position newHeadPos = new Position(head.pos.row + dy, head.pos.col + dx);
 
-        if (growing) {
-            Segment newHead = new Segment(newHeadPos, nextSegmentColor);
-            body.addFirst(newHead);
-            growing = false;
-        } else {
-            Segment tail = body.removeLast();
-            tail.pos = newHeadPos;
-            body.addFirst(tail);
+   
+        for (int i = body.size() - 1; i >= 1; i--) {
+            body.get(i).pos = body.get(i - 1).pos;
         }
 
+        head.pos = newHeadPos;
 
+
+        if (growing) {
+            body.addLast(new Segment(oldTailPos, nextSegmentColor));
+            growing = false;
+        }
     }
 
     public void grow(Color foodColor) {
@@ -60,25 +62,13 @@ public class Snake {
             }
         }
         return false;
-
     }
 
     public void setVelocity(int newDX, int newDY) {
         if (dx == -newDX && dy == -newDY) {
             return;
         }
-
         dx = newDX;
         dy = newDY;
-        
     }
-
-    public boolean ateFood(Position foodPos, Color foodColor) {
-        if (getHeadPos().equals(foodPos)) {
-            grow(foodColor);
-            return true;
-        }
-        return false;
-    }
-
 }
