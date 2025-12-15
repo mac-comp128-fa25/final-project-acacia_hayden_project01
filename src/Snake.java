@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import edu.macalester.graphics.*;
 import java.awt.Color;
 /**
  * Represents the snake in the Snake game.

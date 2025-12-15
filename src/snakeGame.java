@@ -5,14 +5,12 @@ import edu.macalester.graphics.Ellipse;
 
 import edu.macalester.graphics.events.Key;
 
-import edu.macalester.graphics.events.KeyboardEvent;
 import edu.macalester.graphics.ui.Button;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Controls the main game loop and user interaction for the Snake game.
