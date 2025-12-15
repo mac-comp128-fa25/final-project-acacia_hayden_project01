@@ -14,6 +14,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Controls the main game loop and user interaction for the Snake game.
+ *
+ * <p>This class is responsible for initializing the game window, handling
+ * keyboard input, updating game state over time, detecting collisions, and
+ * rendering all visual elements. It coordinates interactions between the
+ * {@link Snake}, {@link Grid}, {@link Food}, and {@link Score} classes.</p>
+ *
+ * <p>The game loop is driven by a timed animation callback that advances the
+ * snake at regular intervals. Game speed increases as the player consumes
+ * food, making the game progressively more challenging.</p>
+ */
 public class SnakeGame {
 
     private static final int CELL_SIZE = 40;
@@ -36,6 +48,13 @@ public class SnakeGame {
     private ArrayList<Food> foods = new ArrayList<>();
     private GraphicsGroup snakeGroup;
 
+    /**
+     * Constructs and initializes the Snake game.
+     *
+     * <p>This constructor sets up the game window, initializes all game objects,
+     * registers keyboard input handlers, spawns initial food, and starts the
+     * animation loop.</p>
+     */
     public SnakeGame() {
         canvas = new CanvasWindow("Snake Survival", COLS * CELL_SIZE, ROWS * CELL_SIZE);
         canvas.setBackground(Color.BLACK);
@@ -50,6 +69,7 @@ public class SnakeGame {
         spawnFood(5);
         draw();
 
+        // Handle keybpard input to control snake movement
         canvas.onKeyDown(event -> { 
              Key key = event.getKey();
 
@@ -64,9 +84,18 @@ public class SnakeGame {
             }
         });
 
+        // Start the animation game loop
         canvas.animate(dt -> update(dt));
     }
 
+    /**
+     * Updates the game state based on elapsed time.
+     *
+     * <p>This method is called repeatedly by the animation loop. When enough
+     * time has passed, the snake advances one step.</p>
+     *
+     * @param dt the time (in seconds) since the last update
+     */
     private void update(double dt) {
         if (gameOver) return;
 
@@ -78,6 +107,12 @@ public class SnakeGame {
         }
     }
 
+    /**
+     * Advances the game by one logical step.
+     *
+     * <p>This method moves the snake, checks for wall and self-collisions,
+     * processes food consumption, updates the score, and redraws the game.</p>
+     */
     private void step() {
         snake.move();
 
@@ -110,6 +145,15 @@ public class SnakeGame {
         draw();
     }
 
+    /**
+     * Spawns a specified number of food items at random, unoccupied positions.
+     *
+     * <p>This method ensures that food does not appear on top of the snake or
+     * existing food items. A variety of colors is used to visually distinguish
+     * different food items.</p>
+     *
+     * @param count the number of food items to spawn
+     */
     private void spawnFood(int count) {
 
         Color[] colors = {
@@ -150,6 +194,7 @@ public class SnakeGame {
                 p = grid.randomPosition();
                 valid = true;
 
+                // Ensure food doesn't overlap the snake
                 for (Segment s : body) {
                     if (s.pos.equals(p)) {
                         valid = false;
@@ -157,6 +202,7 @@ public class SnakeGame {
                     }
                 }
 
+                // Ensure the food doesn't overlap existing food
                 for (Food f : foods) {
                     if (f.position.equals(p)) {
                         valid = false;
@@ -171,10 +217,17 @@ public class SnakeGame {
         }
     }
 
+    /**
+     * Draws all game elements to the canvas.
+     *
+     * <p>This includes the grid, food items, and all segments of the snake.
+     * The canvas is cleared and redrawn each frame.</p>
+     */
     private void draw() {
         canvas.removeAll();
         grid.draw(canvas, CELL_SIZE);
 
+        // Draw food items
         for (Food f : foods) {
             double size = CELL_SIZE * 0.7;
             double offset = (CELL_SIZE - size) / 2;
@@ -190,6 +243,7 @@ public class SnakeGame {
             canvas.add(foodCircle);
         }
 
+        // Draw snake segments
         for (Segment seg : snake.getBody()) {
             double x = seg.pos.col * CELL_SIZE;
             double y = seg.pos.row * CELL_SIZE;
@@ -202,6 +256,9 @@ public class SnakeGame {
         }
     }
 
+    /**
+     * Displays and positions the restart button after the game ends.
+     */
     public void setUpRestart() {
         if (restartButton == null) {
             restartButton = new Button("Restart");
@@ -214,6 +271,12 @@ public class SnakeGame {
         );
     }
 
+     /**
+     * Resets the game to its initial state.
+     *
+     * <p>This method clears the board, resets the snake, score, and speed,
+     * and removes the restart button.</p>
+     */
     public void restartGame() {
         gameOver = false;
         timeSinceMove = 0;
@@ -232,6 +295,11 @@ public class SnakeGame {
         draw();
     }
 
+    /**
+     * Launches the Snake game.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         new SnakeGame();
     }
